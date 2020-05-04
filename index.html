@@ -8,20 +8,69 @@
 
 <h2 align="center"> An improved multi-band parallel generation model based on MelGAN for better and faster waveform generation</h2>
 <div><b>Abstract:</b> 
-In this paper, we propose multi-band MelGAN, a much faster waveform generation model targeting to high-quality text-to-speech. Specifically, we improve the original MelGAN by the following aspects. First, we increase the receptive field of the generator, which is proven to be beneficial to speech generation. Second, we substitute the feature matching loss with the multi-resolution STFT loss to better measure the difference between fake and real speech. Together with pre-training, this improvement leads to both better quality and better training stability. More importantly, we extend MelGAN with multi-band processing: the generator takes mel-spectrograms as input and produces sub-band signals which are subsequently summed back to full-band signals as discriminator input. The proposed multi-band MelGAN has achieved high MOS of 4.34 and 4.18 in waveform generation and TTS, respectively. With only 1.91M model parameters, our model effectively reduces the total computational complexity of the original MelGAN from 7.6 to 0.95 GFLOPS. Our Pytorch implementation, which will be open-resourced shortly, can achieve a real-time factor of 0.03 on CPU without hardware specific optimization.    
+  In this paper, we propose multi-band MelGAN, a much faster waveform generation model targeting to high-quality text-to-speech. Specifically, we improve the original MelGAN by the following aspects. First, we increase the receptive field of the generator, which is proven to be beneficial to speech generation. Second, we substitute the feature matching loss with the multi-resolution STFT loss to better measure the difference between fake and real speech. Together with pre-training, this improvement leads to both better quality and better training stability. More importantly, we extend MelGAN with multi-band processing: the generator takes mel-spectrograms as input and produces sub-band signals which are subsequently summed back to full-band signals as discriminator input. The proposed multi-band MelGAN has achieved high MOS of 4.34 and 4.22 in waveform generation and TTS, respectively. With only 1.91M model parameters, our model effectively reduces the total computational complexity of the original MelGAN from 5.85 to 0.95 GFLOPS. Our Pytorch implementation, which will be open-resourced shortly, can achieve a real-time factor of 0.03 on CPU without hardware specific optimization.
 </div>
 
 </p>
 
 <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+
+<style type="text/css">
+  .tg  {border-collapse:collapse;border-spacing:0;}
+  .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    overflow:hidden;padding:10px 5px;word-break:normal;}
+  .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+  .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+  .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+  </style>
+  <table class="tg">
+    <tr>
+      <th class="tg-c3ow">Index</th>
+      <th class="tg-c3ow">Modle</th>
+      <th class="tg-c3ow">Loss</th>
+    </tr>
+    <tr>
+      <td class="tg-c3ow">F0</td>
+      <td class="tg-0pky">basic MelGAN</td>
+      <td class="tg-0pky">feature matching loss + gan loss</td>
+    </tr>
+    <tr>
+      <td class="tg-c3ow">F1</td>
+      <td class="tg-0pky">&nbsp;&nbsp;&nbsp;+ <span style="font-weight:normal">Pretrain G</span></td>
+      <td class="tg-0pky">feature matching loss + gan loss</td>
+    </tr>
+    <tr>
+      <td class="tg-c3ow">F2</td>
+      <td class="tg-0pky">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ multi-resolution STFT</td>
+      <td class="tg-0pky">multi-resolution stft loss + gan loss</td>
+    </tr>
+    <tr>
+      <td class="tg-c3ow">F3</td>
+      <td class="tg-0pky">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:normal">+ Deepen ResStack</span></td>
+      <td class="tg-0pky">multi-resolution stft loss + gan loss</td>
+    </tr>
+    <tr>
+      <td class="tg-c3ow">M1</td>
+      <td class="tg-0pky">MB-MelGAN</td>
+      <td class="tg-0pky">full-band loss + gan loss</td>
+    </tr>
+    <tr>
+      <td class="tg-c3ow">M2</td>
+      <td class="tg-0pky">MB-MelGAN</td>
+      <td class="tg-0pky">sub-band + full-band loss + gan loss</td>
+    </tr>
+  </table>
+    
 <h2>Neutral vocoder</h2>
+
 
 <h3>3.3.1 Improvements on basic MelGAN</h3>
 <blockquote>
 <table>
 <tr><td colspan=2><span>1. 建议北京也搞一个哟！</span></td></tr>
 <tr>
-<td align=center width=200>F0(MelGAN)</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3(FB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>F0</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/f0/000324.wav"></audio></td>
@@ -33,7 +82,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>2. 秋保的脚部等处也负有轻伤。</span></td></tr>
 <tr>
-<td align=center width=200>F0(MelGAN)</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3(FB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>F0</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/f0/000679.wav"></audio></td>
@@ -45,7 +94,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>3. 这已不是蔡某首次伸出肮脏之手。</span></td></tr>
 <tr>
-<td align=center width=200>F0(MelGAN)</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3(FB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>F0</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/f0/003124.wav"></audio></td>
@@ -57,7 +106,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>4. 目前，四位市民已为自己的爱犬报名。</span></td></tr>
 <tr>
-<td align=center width=200>F0(MelGAN)</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3(FB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>F0</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/f0/005395.wav"></audio></td>
@@ -69,7 +118,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>5. 随着关于“收入增长”的陆续吹风，百姓的胃口被越吊越高。</span></td></tr>
 <tr>
-<td align=center width=200>F0(MelGAN)</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3(FB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>F0</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/f0/006776.wav"></audio></td>
@@ -81,7 +130,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>6. 于是，他们向乡政府提出，想义务赡养乡里的一些孤寡老人。</span></td></tr>
 <tr>
-<td align=center width=200>F0(MelGAN)</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3(FB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>F0</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/f0/007009.wav"></audio></td>
@@ -93,7 +142,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>7. 枪案发生后警方封锁了曼哈顿多条街道。</span></td></tr>
 <tr>
-<td align=center width=200>F0(MelGAN)</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3(FB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>F0</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/f0/008637.wav"></audio></td>
@@ -105,7 +154,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>8. 我们从黄海之滨，向青藏高原，向世界屋脊，发去我们最好的祝愿。</span></td></tr>
 <tr>
-<td align=center width=200>F0(MelGAN)</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3(FB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>F0</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/f0/008998.wav"></audio></td>
@@ -117,7 +166,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>9. 因华国锋肖鸡，墓地设计根据其属相设计。</span></td></tr>
 <tr>
-<td align=center width=200>F0(MelGAN)</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3(FB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>F0</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/f0/009999.wav"></audio></td>
@@ -129,7 +178,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>10. 在狱中，张明宝悔恨交加，写了一份忏悔书。</span></td></tr>
 <tr>
-<td align=center width=200>F0(MelGAN)</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3(FB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>F0</td><td align=center width=200>F1</td><td align=center width=200>F2</td><td align=center width=200>F3</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/f0/010000.wav"></audio></td>
@@ -140,13 +189,17 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 </tr>
 </table>
 </blockquote>
+<div align="center">
+  <img src="figures/table3.png" width="500px">
+</div>
+
 
 <h3>3.3.2 Training strategy for MB-MelGAN</h3>
 <blockquote>
 <table>
 <tr><td colspan=2><span>1. 建议北京也搞一个哟！</span></td></tr>
 <tr>
-<td align=center width=200>M1</td><td align=center width=200>M2(MB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>M1</td><td align=center width=200>M2</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/m1/000324.wav"></audio></td>
@@ -156,7 +209,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>2. 秋保的脚部等处也负有轻伤。</span></td></tr>
 <tr>
-<td align=center width=200>M1</td><td align=center width=200>M2(MB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>M1</td><td align=center width=200>M2</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/m1/000679.wav"></audio></td>
@@ -166,7 +219,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>3. 这已不是蔡某首次伸出肮脏之手。</span></td></tr>
 <tr>
-<td align=center width=200>M1</td><td align=center width=200>M2(MB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>M1</td><td align=center width=200>M2</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/m1/003124.wav"></audio></td>
@@ -176,7 +229,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>4. 目前，四位市民已为自己的爱犬报名。</span></td></tr>
 <tr>
-<td align=center width=200>M1</td><td align=center width=200>M2(MB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>M1</td><td align=center width=200>M2</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/m1/005395.wav"></audio></td>
@@ -186,7 +239,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>5. 随着关于“收入增长”的陆续吹风，百姓的胃口被越吊越高。</span></td></tr>
 <tr>
-<td align=center width=200>M1</td><td align=center width=200>M2(MB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>M1</td><td align=center width=200>M2</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/m1/006776.wav"></audio></td>
@@ -196,7 +249,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>6. 于是，他们向乡政府提出，想义务赡养乡里的一些孤寡老人。</span></td></tr>
 <tr>
-<td align=center width=200>M1</td><td align=center width=200>M2(MB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>M1</td><td align=center width=200>M2</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/m1/007009.wav"></audio></td>
@@ -206,7 +259,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>7. 枪案发生后警方封锁了曼哈顿多条街道。</span></td></tr>
 <tr>
-<td align=center width=200>M1</td><td align=center width=200>M2(MB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>M1</td><td align=center width=200>M2</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/m1/008637.wav"></audio></td>
@@ -216,7 +269,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>8. 我们从黄海之滨，向青藏高原，向世界屋脊，发去我们最好的祝愿。</span></td></tr>
 <tr>
-<td align=center width=200>M1</td><td align=center width=200>M2(MB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>M1</td><td align=center width=200>M2</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/m1/008998.wav"></audio></td>
@@ -226,7 +279,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>9. 因华国锋肖鸡，墓地设计根据其属相设计。</span></td></tr>
 <tr>
-<td align=center width=200>M1</td><td align=center width=200>M2(MB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>M1</td><td align=center width=200>M2</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/m1/009999.wav"></audio></td>
@@ -236,7 +289,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>10. 在狱中，张明宝悔恨交加，写了一份忏悔书。</span></td></tr>
 <tr>
-<td align=center width=200>M1</td><td align=center width=200>M2(MB-MelGAN)</td><td align=center width=200>target</td>
+<td align=center width=200>M1</td><td align=center width=200>M2</td><td align=center width=200>target</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/m1/010000.wav"></audio></td>
@@ -245,6 +298,10 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 </tr>
 </table>
 </blockquote>
+<div style=" margin-left:250px;">
+  <img src="figures/table4.png" width="500px">
+</div>
+
 <hr style="height:1px;border:none;border-top:1px solid #555555;" />
 
 <h3>Text-to-speech</h3>
@@ -252,7 +309,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <table>
 <tr><td colspan=2><span>1. 建议北京也搞一个哟！</span></td></tr>
 <tr>
-<td align=center width=200>MelGAN</td><td align=center width=200>FB-MelGAN</td><td align=center width=200>MB-MelGAN</td>
+<td align=center width=200>F0</td><td align=center width=200>F3</td><td align=center width=200>M2</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/tts/0/000324.wav"></audio></td>
@@ -262,7 +319,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>2. 秋保的脚部等处也负有轻伤。</span></td></tr>
 <tr>
-<td align=center width=200>MelGAN</td><td align=center width=200>FB-MelGAN</td><td align=center width=200>MB-MelGAN</td>
+<td align=center width=200>F0</td><td align=center width=200>F3</td><td align=center width=200>M2</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/tts/0/000679.wav"></audio></td>
@@ -272,7 +329,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>.3 随着关于“收入增长”的陆续吹风，百姓的胃口被越吊越高。</span></td></tr>
 <tr>
-<td align=center width=200>MelGAN</td><td align=center width=200>FB-MelGAN</td><td align=center width=200>MB-MelGAN</td>
+<td align=center width=200>F0</td><td align=center width=200>F3</td><td align=center width=200>M2</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/tts/0/006776.wav"></audio></td>
@@ -282,7 +339,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>4. 于是，他们向乡政府提出，想义务赡养乡里的一些孤寡老人。</span></td></tr>
 <tr>
-<td align=center width=200>MelGAN</td><td align=center width=200>FB-MelGAN</td><td align=center width=200>MB-MelGAN</td>
+<td align=center width=200>F0</td><td align=center width=200>F3</td><td align=center width=200>M2</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/tts/0/007009.wav"></audio></td>
@@ -292,7 +349,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>5. 枪案发生后警方封锁了曼哈顿多条街道。</span></td></tr>
 <tr>
-<td align=center width=200>MelGAN</td><td align=center width=200>FB-MelGAN</td><td align=center width=200>MB-MelGAN</td>
+<td align=center width=200>F0</td><td align=center width=200>F3</td><td align=center width=200>M2</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/tts/0/008637.wav"></audio></td>
@@ -302,7 +359,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>6. 我们从黄海之滨，向青藏高原，向世界屋脊，发去我们最好的祝愿。</span></td></tr>
 <tr>
-<td align=center width=200>MelGAN</td><td align=center width=200>FB-MelGAN</td><td align=center width=200>MB-MelGAN</td>
+<td align=center width=200>F0</td><td align=center width=200>F3</td><td align=center width=200>M2</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/tts/0/008998.wav"></audio></td>
@@ -312,7 +369,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>7. 因华国锋肖鸡，墓地设计根据其属相设计。</span></td></tr>
 <tr>
-<td align=center width=200>MelGAN</td><td align=center width=200>FB-MelGAN</td><td align=center width=200>MB-MelGAN</td>
+<td align=center width=200>F0</td><td align=center width=200>F3</td><td align=center width=200>M2</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/tts/0/009999.wav"></audio></td>
@@ -322,7 +379,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>8. 在狱中，张明宝悔恨交加，写了一份忏悔书。</span></td></tr>
 <tr>
-<td align=center width=200>MelGAN</td><td align=center width=200>FB-MelGAN</td><td align=center width=200>MB-MelGAN</td>
+<td align=center width=200>F0</td><td align=center width=200>F3</td><td align=center width=200>M2</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/tts/0/010000.wav"></audio></td>
@@ -332,7 +389,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>9. 他一度梦想参军，但是因没身份而作罢，整日在村内瞎晃。</span></td></tr>
 <tr>
-<td align=center width=200>MelGAN</td><td align=center width=200>FB-MelGAN</td><td align=center width=200>MB-MelGAN</td>
+<td align=center width=200>F0</td><td align=center width=200>F3</td><td align=center width=200>M2</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/tts/0/41.wav"></audio></td>
@@ -342,7 +399,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>10. 随后的两天时间里，警方出击，解救了小美、丹丹、可可等女子。</span></td></tr>
 <tr>
-<td align=center width=200>MelGAN</td><td align=center width=200>FB-MelGAN</td><td align=center width=200>MB-MelGAN</td>
+<td align=center width=200>F0</td><td align=center width=200>F3</td><td align=center width=200>M2</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/tts/0/66.wav"></audio></td>
@@ -352,7 +409,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>11. 床前明月光，疑是地上霜。 举头望明月，低头思故乡。</span></td></tr>
 <tr>
-<td align=center width=200>MelGAN</td><td align=center width=200>FB-MelGAN</td><td align=center width=200>MB-MelGAN</td>
+<td align=center width=200>F0</td><td align=center width=200>F3</td><td align=center width=200>M2</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/tts/0/120.wav"></audio></td>
@@ -362,20 +419,22 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <tr height="15px"></tr>
 <tr><td colspan=2><span>12. 主人为什么突然说这个数字啊，是不是有什么特殊的含义呢</span></td></tr>
 <tr>
-<td align=center width=200>MelGAN</td><td align=center width=200>FB-MelGAN</td><td align=center width=200>MB-MelGAN</td>
+<td align=center width=200>F0</td><td align=center width=200>F3</td><td align=center width=200>M2</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/tts/0/287.wav"></audio></td>
 <td><audio controls><source src="samples/tts/1/287.wav"></audio></td>
 <td><audio controls><source src="samples/tts/2/287.wav"></audio></td>
 </tr>
-
 </table>
 </blockquote>
+<div style=" margin-left:250px;">
+  <img src="figures/table6.png" width="500px">
+</div>
 
 <hr style="height:1px;border:none;border-top:1px solid #555555;" />
 
-<h3>Unseen speakers of MB-MelGAN (The top is the audio of the predict, and the bottom is the audio of the target)</h3>
+<h3>Unseen speakers of M2 (The top is the audio of the predict, and the bottom is the audio of the target)</h3>
 <blockquote>
 <table>
 <tr>
@@ -418,7 +477,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 </tr>
 <tr height="15px"></tr>
 <tr>
-<td align=center width=200>speaker1 (female)</td><td align=center width=200>speaker2 (female)</td><td align=center width=200>speaker3(female)</td><td align=center width=200>speaker4 (male)</td>
+<td align=center width=200>speaker1 (female)</td><td align=center width=200>speaker2 (female)</td><td align=center width=200>speaker3 (female)</td><td align=center width=200>speaker4 (male)</td>
 </tr>
 <tr>
 <td><audio controls><source src="samples/vocoder/out_domain/predict/13.wav"></audio><audio controls><source src="samples/vocoder/out_domain/target/13_target.wav"></audio></td>
@@ -432,12 +491,12 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
 <hr style="height:1px;border:none;border-top:1px solid #555555;" />
 
 <h3>Additional experiment</h3>
-<h4>Neutral vocoder(MB-MelGAN, hop_length=80 VS MB-MelGAN, hop_length=160)</h4>
+<h4>Neutral vocoder (M2, hop_length=80 <font color="red">VS</font> M2, hop_length=160)</h4>
 <blockquote>
     <table>
     <tr><td colspan=2><span>1. 建议北京也搞一个哟！</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN (hop_length=80)</td><td align=center width=200>MB-MelGAN (hop_length=160)</td><td align=center width=200>target</td>
+    <td align=center width=200>M2 (hop_length=80)</td><td align=center width=200>M2 (hop_length=160)</td><td align=center width=200>target</td>
     </tr>
     <tr>
     <td><audio controls><source src="samples/vocoder/5ms_multi_band/000324.wav"></audio></td>
@@ -447,7 +506,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
     <tr height="15px"></tr>
     <tr><td colspan=2><span>2. 秋保的脚部等处也负有轻伤。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN(hop_length=80)</td><td align=center width=200>MB-MelGAN(hop_length=160)</td><td align=center width=200>target</td>
+      <td align=center width=200>M2 (hop_length=80)</td><td align=center width=200>M2 (hop_length=160)</td><td align=center width=200>target</td>
     </tr>
     <tr>
     <td><audio controls><source src="samples/vocoder/5ms_multi_band/000679.wav"></audio></td>
@@ -457,7 +516,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
     <tr height="15px"></tr>
     <tr><td colspan=2><span>3. 这已不是蔡某首次伸出肮脏之手。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN(hop_length=80)</td><td align=center width=200>MB-MelGAN(hop_length=160)</td><td align=center width=200>target</td>
+      <td align=center width=200>M2 (hop_length=80)</td><td align=center width=200>M2 (hop_length=160)</td><td align=center width=200>target</td>
     </tr>
     <tr>
     <td><audio controls><source src="samples/vocoder/5ms_multi_band/003124.wav"></audio></td>
@@ -467,7 +526,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
     <tr height="15px"></tr>
     <tr><td colspan=2><span>4. 目前，四位市民已为自己的爱犬报名。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN(hop_length=80)</td><td align=center width=200>MB-MelGAN(hop_length=160)</td><td align=center width=200>target</td>
+      <td align=center width=200>M2 (hop_length=80)</td><td align=center width=200>M2 (hop_length=160)</td><td align=center width=200>target</td>
     </tr>
     <tr>
     <td><audio controls><source src="samples/vocoder/5ms_multi_band/005395.wav"></audio></td>
@@ -477,7 +536,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
     <tr height="15px"></tr>
     <tr><td colspan=2><span>5. 随着关于“收入增长”的陆续吹风，百姓的胃口被越吊越高。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN(hop_length=80)</td><td align=center width=200>MB-MelGAN(hop_length=160)</td><td align=center width=200>target</td>
+      <td align=center width=200>M2 (hop_length=80)</td><td align=center width=200>M2 (hop_length=160)</td><td align=center width=200>target</td>
     </tr>
     <tr>
     <td><audio controls><source src="samples/vocoder/5ms_multi_band/006776.wav"></audio></td>
@@ -487,7 +546,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
     <tr height="15px"></tr>
     <tr><td colspan=2><span>6. 于是，他们向乡政府提出，想义务赡养乡里的一些孤寡老人。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN(hop_length=80)</td><td align=center width=200>MB-MelGAN(hop_length=160)</td><td align=center width=200>target</td>
+      <td align=center width=200>M2 (hop_length=80)</td><td align=center width=200>M2 (hop_length=160)</td><td align=center width=200>target</td>
     </tr>
     <tr>
     <td><audio controls><source src="samples/vocoder/5ms_multi_band/007009.wav"></audio></td>
@@ -497,7 +556,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
     <tr height="15px"></tr>
     <tr><td colspan=2><span>7. 枪案发生后警方封锁了曼哈顿多条街道。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN(hop_length=80)</td><td align=center width=200>MB-MelGAN(hop_length=160)</td><td align=center width=200>target</td>
+      <td align=center width=200>M2 (hop_length=80)</td><td align=center width=200>M2 (hop_length=160)</td><td align=center width=200>target</td>
     </tr>
     <tr>
     <td><audio controls><source src="samples/vocoder/5ms_multi_band/008637.wav"></audio></td>
@@ -507,7 +566,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
     <tr height="15px"></tr>
     <tr><td colspan=2><span>8. 我们从黄海之滨，向青藏高原，向世界屋脊，发去我们最好的祝愿。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN(hop_length=80)</td><td align=center width=200>MB-MelGAN(hop_length=160)</td><td align=center width=200>target</td>
+      <td align=center width=200>M2 (hop_length=80)</td><td align=center width=200>M2 (hop_length=160)</td><td align=center width=200>target</td>
     </tr>
     <tr>
     <td><audio controls><source src="samples/vocoder/5ms_multi_band/008998.wav"></audio></td>
@@ -517,7 +576,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
     <tr height="15px"></tr>
     <tr><td colspan=2><span>9. 因华国锋肖鸡，墓地设计根据其属相设计。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN(hop_length=80)</td><td align=center width=200>MB-MelGAN(hop_length=160)</td><td align=center width=200>target</td>
+      <td align=center width=200>M2 (hop_length=80)</td><td align=center width=200>M2 (hop_length=160)</td><td align=center width=200>target</td>
     </tr>
     <tr>
     <td><audio controls><source src="samples/vocoder/5ms_multi_band/009999.wav"></audio></td>
@@ -527,7 +586,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
     <tr height="15px"></tr>
     <tr><td colspan=2><span>10. 在狱中，张明宝悔恨交加，写了一份忏悔书。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN(hop_length=80)</td><td align=center width=200>MB-MelGAN(hop_length=160)</td><td align=center width=200>target</td>
+      <td align=center width=200>M2 (hop_length=80)</td><td align=center width=200>M2 (hop_length=160)</td><td align=center width=200>target</td>
     </tr>
     <tr>
     <td><audio controls><source src="samples/vocoder/5ms_multi_band/010000.wav"></audio></td>
@@ -538,12 +597,12 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
     </table>
     </blockquote>
 
-<h4>Neutral vocoder for 24,000 sample rate(Multi-band iMelGAN, hop_length=120, win_length=240)</h4>
+<h4>Neutral vocoder for 24,000 sample rate (M2, hop_length=120, win_length=240)</h4>
 <blockquote>
     <table>
     <tr><td colspan=2><span>1. 建议北京也搞一个哟！</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN</td><td align=center width=200>target</td>
+    <td align=center width=200>M2</td><td align=center width=200>target</td>
     </tr>
     <tr>
     <td><audio controls><source src="samples/vocoder/24k_5ms_subband/000324.wav"></audio></td>
@@ -552,7 +611,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
     <tr height="15px"></tr>
     <tr><td colspan=2><span>2. 秋保的脚部等处也负有轻伤。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN</td><td align=center width=200>target</td>
+      <td align=center width=200>M2</td><td align=center width=200>target</td>
     </tr>
     <tr>
     <td><audio controls><source src="samples/vocoder/24k_5ms_subband/000679.wav"></audio></td>
@@ -561,7 +620,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
     <tr height="15px"></tr>
     <tr><td colspan=2><span>3. 这已不是蔡某首次伸出肮脏之手。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN</td><td align=center width=200>target</td>
+      <td align=center width=200>M2</td><td align=center width=200>target</td>
     </tr>
     <tr>
     <td><audio controls><source src="samples/vocoder/24k_5ms_subband/003124.wav"></audio></td>
@@ -570,7 +629,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
     <tr height="15px"></tr>
     <tr><td colspan=2><span>4. 目前，四位市民已为自己的爱犬报名。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN</td><td align=center width=200>target</td>
+      <td align=center width=200>M2</td><td align=center width=200>target</td>
     </tr>
     <tr>
     <td><audio controls><source src="samples/vocoder/24k_5ms_subband/005395.wav"></audio></td>
@@ -579,7 +638,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
     <tr height="15px"></tr>
     <tr><td colspan=2><span>5. 随着关于“收入增长”的陆续吹风，百姓的胃口被越吊越高。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN</td><td align=center width=200>target</td>
+      <td align=center width=200>M2</td><td align=center width=200>target</td>
     </tr>
     <tr>
     <td><audio controls><source src="samples/vocoder/24k_5ms_subband/006776.wav"></audio></td>
@@ -588,40 +647,40 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
     <tr height="15px"></tr>
     <tr><td colspan=2><span>6. 于是，他们向乡政府提出，想义务赡养乡里的一些孤寡老人。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN</td><td align=center width=200>target</td>    </tr>
-    <tr>
+      <td align=center width=200>M2</td><td align=center width=200>target</td>
+      <tr>
     <td><audio controls><source src="samples/vocoder/24k_5ms_subband/007009.wav"></audio></td>
     <td><audio controls><source src="samples/vocoder/24k_target/007009_target.wav"></audio></td>
     </tr>
     <tr height="15px"></tr>
     <tr><td colspan=2><span>7. 枪案发生后警方封锁了曼哈顿多条街道。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN</td><td align=center width=200>target</td>    </tr>
-    <tr>
+      <td align=center width=200>M2</td><td align=center width=200>target</td>
+      <tr>
     <td><audio controls><source src="samples/vocoder/24k_5ms_subband/008637.wav"></audio></td>
     <td><audio controls><source src="samples/vocoder/24k_target/008637_target.wav"></audio></td>
     </tr>
     <tr height="15px"></tr>
     <tr><td colspan=2><span>8. 我们从黄海之滨，向青藏高原，向世界屋脊，发去我们最好的祝愿。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN</td><td align=center width=200>target</td>    </tr>
-    <tr>
+      <td align=center width=200>M2</td><td align=center width=200>target</td>
+      <tr>
     <td><audio controls><source src="samples/vocoder/24k_5ms_subband/008998.wav"></audio></td>
     <td><audio controls><source src="samples/vocoder/24k_target/008998_target.wav"></audio></td>
     </tr>
     <tr height="15px"></tr>
     <tr><td colspan=2><span>9. 因华国锋肖鸡，墓地设计根据其属相设计。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN</td><td align=center width=200>target</td>    </tr>
-    <tr>
+      <td align=center width=200>M2</td><td align=center width=200>target</td>
+      <tr>
     <td><audio controls><source src="samples/vocoder/24k_5ms_subband/009999.wav"></audio></td>
     <td><audio controls><source src="samples/vocoder/24k_target/009999_target.wav"></audio></td>
     </tr>
     <tr height="15px"></tr>
     <tr><td colspan=2><span>10. 在狱中，张明宝悔恨交加，写了一份忏悔书。</span></td></tr>
     <tr>
-    <td align=center width=200>MB-MelGAN</td><td align=center width=200>target</td>    </tr>
-    <tr>
+      <td align=center width=200>M2</td><td align=center width=200>target</td>
+      <tr>
     <td><audio controls><source src="samples/vocoder/24k_5ms_subband/010000.wav"></audio></td>
     <td><audio controls><source src="samples/vocoder/24k_target/010000_target.wav"></audio></td>
     </tr>
@@ -629,7 +688,7 @@ In this paper, we propose multi-band MelGAN, a much faster waveform generation m
     </table>
     </blockquote>
 
-<h4>Multi-speaker-vocoder(Multi-band iMelGAN)</h4>
+<h4>Multi-speaker-vocoder (MB-MelGAN)</h4>
 <blockquote>
 <table>
 <tr height="15px"></tr>
