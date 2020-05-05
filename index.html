@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<h2 align="center"> An improved multi-band parallel generation model based on MelGAN for better and faster waveform generation</h2>
+<h2 align="center"> Multi-band MelGAN: Faster Waveform Generation for High-Quality Text-to-Speech</h2>
 <div><b>Abstract:</b> 
   In this paper, we propose multi-band MelGAN, a much faster waveform generation model targeting to high-quality text-to-speech. Specifically, we improve the original MelGAN by the following aspects. First, we increase the receptive field of the generator, which is proven to be beneficial to speech generation. Second, we substitute the feature matching loss with the multi-resolution STFT loss to better measure the difference between fake and real speech. Together with pre-training, this improvement leads to both better quality and better training stability. More importantly, we extend MelGAN with multi-band processing: the generator takes mel-spectrograms as input and produces sub-band signals which are subsequently summed back to full-band signals as discriminator input. The proposed multi-band MelGAN has achieved high MOS of 4.34 and 4.22 in waveform generation and TTS, respectively. With only 1.91M model parameters, our model effectively reduces the total computational complexity of the original MelGAN from 5.85 to 0.95 GFLOPS. Our Pytorch implementation, which will be open-resourced shortly, can achieve a real-time factor of 0.03 on CPU without hardware specific optimization.
 </div>
@@ -437,7 +437,7 @@
 
 <hr style="height:1px;border:none;border-top:1px solid #555555;" />
 
-<h3>Unseen speakers of M2 (The top is the audio of the predict, and the bottom is the audio of the target)</h3>
+<h3>Generalization ability of M2 to unseen speakers (Up: predicted; Down: target )</h3>
 <blockquote>
 <table>
 <tr>
